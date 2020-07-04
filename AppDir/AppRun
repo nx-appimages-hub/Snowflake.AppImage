@@ -1,0 +1,6 @@
+#! /bin/bash
+set -e
+
+cd ${APPDIR}/application
+
+${APPDIR}/jre/bin/java -jar snowflake.jar $@
