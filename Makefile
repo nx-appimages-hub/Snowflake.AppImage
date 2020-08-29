@@ -16,7 +16,7 @@ all:
 	mkdir -p AppDir/jre
 
 	cp --recursive --force build/opt/snowflake/* AppDir/application
-	cp --recursive --force usr/java/jdk-12.0.2/* AppDir/jre
+	cp --recursive --force usr/java/jdk-*/* AppDir/jre
 
 	chmod +x AppDir/AppRun
 
