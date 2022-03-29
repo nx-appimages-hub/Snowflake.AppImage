@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Snowflake SSH client
+Categories=Development;
 Exec=AppRun
 Icon=snowflake
 Type=Application
