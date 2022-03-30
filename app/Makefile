@@ -27,8 +27,8 @@ all: clean init
 	    libgdk-pixbuf2.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk2.0-0 \
 	    libreadline8 at-spi2-core libpango-1.0-0 libselinux1 default-jdk
 
-	wget --output-document=${PWD}/build/snowflake.jar https://github.com/subhra74/snowflake/releases/download/v1.0.4/snowflake.jar
-	dpkg -x $(PWD)/build/build.deb $(PWD)/build
+	wget --output-document=${PWD}/build/snowflake.jar \
+		https://github.com/subhra74/snowflake/releases/download/v1.0.4/snowflake.jar
 
 	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
 	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
