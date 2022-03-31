@@ -22,27 +22,33 @@ PWD:=$(shell pwd)
 all: clean init
 
 	mkdir --parents $(PWD)/build/Boilerplate.AppDir/snowflake
+	mkdir --parents $(PWD)/build/Boilerplate.AppDir/jre
 
 	$(PWD)/bin/Apprepo.AppImage --destination=$(PWD)/build appdir boilerplate \
 	    libgdk-pixbuf2.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk2.0-0 \
-	    libreadline8 at-spi2-core libpango-1.0-0 libselinux1 default-jdk
+	    libreadline8 at-spi2-core libpango-1.0-0 libselinux1
+
+	wget --output-document=$(PWD)/build/build.rpm --continue https://forensics.cert.org/centos/cert/8/x86_64/jdk-12.0.2_linux-x64_bin.rpm
+	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
 
 	wget --output-document=${PWD}/build/snowflake.jar \
 		https://github.com/subhra74/snowflake/releases/download/v1.0.4/snowflake.jar
 
-	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'PATH=$${PATH}:$${APPDIR}/lib64/jvm/default-java/bin'                                         >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'export PATH=$${PATH}'                                                                        >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${APPDIR}/snowflake'                                    >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}'                                                  >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo ''                                                                                            >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '$${APPDIR}/lib64/jvm/default-java/bin/java -jar $${APPDIR}/snowflake/snowflake.jar $${@}'    >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo ''                                                                     >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo ''                                                                     >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'PATH=$${PATH}:$${APPDIR}/jre/bin'                  					>> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'export PATH=$${PATH}'                                                 >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo ''                                                                     >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo ''                                                                     >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${APPDIR}/snowflake'             >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${APPDIR}/jre'             		>> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}'                           >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo ''                                                                     >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo ''                                                                     >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '$${APPDIR}/jre/bin/java -jar $${APPDIR}/snowflake/snowflake.jar $${@}'    >> $(PWD)/build/Boilerplate.AppDir/AppRun
 
-	cp --recursive --force $(PWD)/build/snowflake.jar $(PWD)/build/Boilerplate.AppDir/snowflake/
+	cp --recursive --force $(PWD)/build/usr/java/jdk-*/* 	$(PWD)/build/Boilerplate.AppDir/jre/
+	cp --recursive --force $(PWD)/build/snowflake.jar 		$(PWD)/build/Boilerplate.AppDir/snowflake/
 
 	rm --force $(PWD)/build/Boilerplate.AppDir/*.desktop
 
@@ -52,7 +58,6 @@ all: clean init
 
 	export ARCH=x86_64 && $(PWD)/bin/appimagetool.AppImage $(PWD)/build/Boilerplate.AppDir $(PWD)/Snowflake.AppImage
 	chmod +x $(PWD)/Snowflake.AppImage
-
 
 init:
 	mkdir --parents $(PWD)/bin
